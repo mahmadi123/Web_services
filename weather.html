@@ -68,71 +68,18 @@
       </div>
     </div>
 		<br>
-		<h2 class="h1" style="text-align:center;">5 Day Forecast</h2 onload="forecast()">
+		<h2 class="h1" style="text-align:center;">5 Day Forecast</h2>
 		<hr>
-		<div class="card-deck" id="5_day_forecast" >
-			<div id="one" style="width: 20%";>
-  				<div class="card">
-      				<div class="card-body">
-       				<h5 class="card-title"> </h5><!-- List Day of the Week Here -->
-        			<p class="card-text">High:<!--List Temperature High --> 
-         			Low: <!-- List Temperature Low -->
-         			Sunrise: <!-- List Time of Sunrise -->
-         			Sunset: 
-         			</p><!-- List Time of Sunset -->
-      				</div>
-   				</div>
-			</div>
-			<div id="one" style="width: 20%";>
-  				<div class="card">
-      				<div class="card-body">
-       				<h5 class="card-title"> </h5><!-- List Day of the Week Here -->
-        			<p class="card-text">High:<!--List Temperature High --> 
-         			Low: <!-- List Temperature Low -->
-         			Sunrise: <!-- List Time of Sunrise -->
-         			Sunset: </p><!-- List Time of Sunset -->
-      				</div>
-   				</div>
-			</div>
-			<div id="one" style="width: 20%";>
-  				<div class="card">
-      				<div class="card-body">
-       				<h5 class="card-title"> </h5><!-- List Day of the Week Here -->
-        			<p class="card-text">High:<!--List Temperature High --> 
-         			Low: <!-- List Temperature Low -->
-         			Sunrise: <!-- List Time of Sunrise -->
-         			Sunset: </p><!-- List Time of Sunset -->
-      				</div>
-   				</div>
-			</div>
-			<div id="one" style="width: 20%";>
-  				<div class="card">
-      				<div class="card-body">
-       				<h5 class="card-title"> </h5><!-- List Day of the Week Here -->
-        			<p class="card-text">High:<!--List Temperature High --> 
-         			Low: <!-- List Temperature Low -->
-         			Sunrise: <!-- List Time of Sunrise -->
-         			Sunset: </p><!-- List Time of Sunset -->
-      				</div>
-   				</div>
-			</div>
-			<div id="one" style="width: 20%";>
-  				<div class="card">
-      				<div class="card-body">
-       				<h5 class="card-title"> </h5><!-- List Day of the Week Here -->
-        			<p class="card-text">High:<!--List Temperature High --> 
-         			Low: <!-- List Temperature Low -->
-         			Sunrise: <!-- List Time of Sunrise -->
-         			Sunset: </p><!-- List Time of Sunset -->
-      				</div>
-   				</div>
-			</div>
+		<div class="card-deck" id="5_day_forecast"  onload="card_filler()" >
+		
 		</div>
 		<br>
 	</div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+
 	<script>
     //helper functions
     var dayOfWeek = "";
@@ -149,6 +96,19 @@
     function getFarenheitTemp(temp){
       return (9*temp/5)+32;
     }
+    function today(){
+    	var mydate= new Date();
+    	var day=mydate.getDay();
+    	return day;
+    }
+
+  
+
+
+
+
+
+
     //run when the document object model is ready for javascript code to execute
 		$(document).ready(function() {
 			var url ='5bc82451636190abd9d7afe6fe9b20b5'; //Place your weatherstack API Call Here - access_key to be used: 5bc82451636190abd9d7afe6fe9b20b5
@@ -194,6 +154,26 @@
 				var summary_obs = data.current.observation_time;
 				var summary_des = data.current.weather_descriptions[0];
 				$('#summary_today').html("Currently it is " + summary_des + "." + " This was observed at " + summary_obs);
+
+				//PROBLEM EXTRA - local time
+				var time = data.location.localtime;
+				$('#local_time').html(time);
+
+			
+				
+				var day = today();
+				//console.log(test);
+				var counter = 0;
+				for (counter=0; counter<5;counter++){
+					day++;
+					if(day > 6){
+						day = 0;
+					}
+					forecast(counter,day);
+					
+				}
+				
+				
       	/*
 					Read the current weather information from the data point values [https://weatherstack.com/documentation] to
 					update the webpage for today's weather:
@@ -234,67 +214,38 @@
 
 
 
-        /*
-        function forecast(){
-        	var count = 0;
-        	//var classes = ['one','two','three','four','five'];
-        	while (count < 5){
-        		//var cur_class = classes[count];
-        		var div = document.getElementById('5_day_forecast');
-        		var current_div = document.createElement("div");
-        		div.appendChild(current_div);
-        		current_div.style.width="20%";
-        		var card = document.createElement("div");
-        		current_div.appendChild(card);
-        		card.className="card";
-        		var card_body = document.createElement("div");
-        		card.appendChild(card_body);
-        		card_body.className="card-body";
-        		var title = document.createElement("h5");
-        		card_body.appendChild(title);
+        
+        function forecast(counter,day){
+        	var div = document.getElementById('5_day_forecast');
+        	var current_div = document.createElement("div");
+        	div.appendChild(current_div);
+        	current_div.style.width="20%";
+        	var card = document.createElement("div");
+        	current_div.appendChild(card);
+        	card.className="card";
+        	var card_body = document.createElement("div");
+        	card.appendChild(card_body);
+        	card_body.className="card-body";
+        	var title = document.createElement("h5");
+        	card_body.appendChild(title);
 
-        		var day = getDayofWeek(8+count,4,2020);
-        		title.innerHTML=day;
+        	var daysofweek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        	title.innerHTML=daysofweek[day];
 
-        		index = getKey(count);
-        		var in_text = document.createElement("p");
-        		card_body.appendChild(in_text);
-        		in_text.className = "card-text"
-        		in_text.innerText=
-        		  `High: ${index.maxtemp} F 
-        		  Low: ${index.mintemp} F 
-        		  Sunrise: ${index.astro.sunrise} 
-        		  Sunset: ${index.astro.sunset}`;
-        		
-        		count += 1;
-        	}
-        };
-		*/
+        	index = getKey(counter);
+        	var in_text = document.createElement("p");
+        	card_body.appendChild(in_text);
+        	in_text.className = "card-text"
+        	in_text.innerText=
+        	`High: ${getFarenheitTemp(index.maxtemp)} F 
+        	Low: ${getFarenheitTemp(index.mintemp)} F 
+        	Sunrise: ${index.astro.sunrise} 
+        	Sunset: ${index.astro.sunset}`;
+        }
+		
 
 
-        function forecast(){
-        	var count = 0;
-        	var classes = ['one','two','three','four','five'];
-        	while (count < 5){
-        		var cur_class = classes[count];
-        		var div = document.getElementById(cur_class);
-        	
 
-        		//var day = getDayofWeek(8+count,4,2020);
-        		//title.innerHTML=day;
-
-        		index = getKey(count);
-        		var in_text = document.getElementbyId("p");
-        	
-        		in_text.innerText=
-        		  `High: ${index.maxtemp} F 
-        		  Low: ${index.mintemp} F 
-        		  Sunrise: ${index.astro.sunrise} 
-        		  Sunset: ${index.astro.sunset}`;
-        		
-        		count += 1;
-        	}
-        };
         //PROBLEM 1
 
 				/*
@@ -325,6 +276,7 @@
 				*/
 			})
 		})
+
  	</script>
 </body>
 </html>
